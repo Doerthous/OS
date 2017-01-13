@@ -1,0 +1,190 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+g_int_vector        0x400             ../lib/spidt.o
+__gdt               0xfff8            ../lib/spgdt.o
+__idt               0x800             ../lib/spidt.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+                0x00400000                __image_base__ = 0x400000
+                0x00000000                __dll__ = 0x0
+                0x00400000                ___ImageBase = 0x400000
+                0x00001000                __section_alignment__ = 0x1000
+                0x00000200                __file_alignment__ = 0x200
+                0x00000004                __major_os_version__ = 0x4
+                0x00000000                __minor_os_version__ = 0x0
+                0x00000001                __major_image_version__ = 0x1
+                0x00000000                __minor_image_version__ = 0x0
+                0x00000004                __major_subsystem_version__ = 0x4
+                0x00000000                __minor_subsystem_version__ = 0x0
+                0x00000003                __subsystem__ = 0x3
+                0x00200000                __size_of_stack_reserve__ = 0x200000
+                0x00001000                __size_of_stack_commit__ = 0x1000
+                0x00100000                __size_of_heap_reserve__ = 0x100000
+                0x00001000                __size_of_heap_commit__ = 0x1000
+                0x00000000                __loader_flags__ = 0x0
+                0x00000000                __dll_characteristics__ = 0x0
+                0x00100000                . = 0x100000
+                0x00100000                _kernel_base = .
+
+.text           0x00100000     0x1800
+ *(.text)
+ .text          0x00100000      0x340 kernel.o
+                0x00100000                kernel_entry
+                0x00100026                load_gdt
+                0x00100036                load_idt
+                0x00100046                sti
+                0x00100048                cli
+                0x0010004a                hlt
+                0x0010004c                switch_to_seg
+                0x00100051                int80syscall
+                0x00100062                exception_divide_error
+                0x0010006c                exception_debug
+                0x00100073                exception_nmi
+                0x0010007a                exception_breakpoint
+                0x00100081                exception_overflow
+                0x00100088                exception_bounds_check
+                0x0010008f                exception_inval_opcode
+                0x00100096                exception_copr_not_avail
+                0x0010009d                exception_double_fault
+                0x001000a4                exception_copr_seg_overrun
+                0x001000ab                exception_inval_tss
+                0x001000b2                exception_segment_not_present
+                0x001000b9                exception_stack_fault
+                0x001000c0                exception_general_protection
+                0x001000c7                exception_page_fault
+                0x001000ce                exception_intel_reserved
+                0x001000d5                exception_copr_error
+                0x001000dc                exception_alignment_check
+                0x001000e3                exception_machine_check
+                0x001000ea                exception_simd_fp
+                0x00100103                intx0
+                0x00100122                intx1
+                0x00100141                intx2
+                0x00100160                intx3
+                0x0010017f                intx4
+                0x0010019e                intx5
+                0x001001bd                intx6
+                0x001001dc                intx7
+                0x001001fb                intx8
+                0x0010021a                intx9
+                0x00100239                intx10
+                0x00100258                intx11
+                0x00100277                intx12
+                0x00100296                intx13
+                0x001002b5                intx14
+                0x001002d4                intx15
+                0x001002f3                io_in8
+                0x001002fe                io_in16
+                0x0010030a                io_in32
+                0x00100315                io_out8
+                0x0010031f                io_out16
+                0x0010032b                io_out32
+ .text          0x00100340       0xac cstart.o
+                0x00100340                cstart
+ .text          0x001003ec      0x154 ../lib/spio.o
+                0x001003ec                putchar
+                0x00100519                puts
+ .text          0x00100540       0xc4 ../lib/spstring.o
+                0x00100540                strlen
+                0x00100565                strcpy
+                0x001005a6                strrvs
+ .text          0x00100604      0x530 ../lib/spsnprintf.o
+                0x0010090b                snprintf
+ .text          0x00100b34      0x174 ../lib/spgdt.o
+                0x00100b34                set_segDesc
+                0x00100bc4                init_gdt
+ .text          0x00100ca8      0x6d4 ../lib/spidt.o
+                0x00100ca8                set_gateDesc
+                0x00100ce8                int_default
+                0x00100d1d                exception
+                0x00100d52                init_idt
+ .text          0x0010137c      0x270 ../lib/spi8259.o
+                0x0010137c                init_i8259
+                0x00101475                i8259_enable_isr
+                0x001014d9                i8259_disable_isr
+                0x0010153b                init_i8253
+                0x0010159c                inthandler21
+                0x001015b9                inthandler2c
+ .text          0x001015ec       0xec ../lib/spmemory.o
+                0x001015ec                dump_memory
+                0x001016cc                mallock
+                0x001016d1                freek
+                0x001016d8                . = ALIGN (0x4)
+
+.rodata
+ *(.rodata)
+                0x001016d8                . = ALIGN (0x4)
+
+.rdata          0x001016d8      0x200
+ *(.rdata)
+ .rdata         0x001016d8       0x64 cstart.o
+ .rdata         0x0010173c       0x28 ../lib/spidt.o
+ .rdata         0x00101764       0x20 ../lib/spmemory.o
+
+.eh_frame       0x00102000      0x600
+ .eh_frame      0x00102000       0x38 cstart.o
+ .eh_frame      0x00102038       0x58 ../lib/spio.o
+ .eh_frame      0x00102090       0x78 ../lib/spstring.o
+ .eh_frame      0x00102108      0x100 ../lib/spsnprintf.o
+ .eh_frame      0x00102208       0x58 ../lib/spgdt.o
+ .eh_frame      0x00102260       0x98 ../lib/spidt.o
+ .eh_frame      0x001022f8       0xe8 ../lib/spi8259.o
+ .eh_frame      0x001023e0       0x80 ../lib/spmemory.o
+                0x00102460                . = ALIGN (0x4)
+
+.data           0x00102460     0x2200
+ *(.data)
+ .data          0x00102460     0x2000 kernel.o
+ .data          0x00104460        0x0 cstart.o
+ .data          0x00104460        0x0 ../lib/spio.o
+ .data          0x00104460        0x0 ../lib/spstring.o
+ .data          0x00104460       0x10 ../lib/spsnprintf.o
+ .data          0x00104470        0x0 ../lib/spgdt.o
+ .data          0x00104470        0x0 ../lib/spidt.o
+ .data          0x00104470        0x0 ../lib/spi8259.o
+ .data          0x00104470        0x8 ../lib/spmemory.o
+
+.drectve        0x00105000      0x200
+ .drectve       0x00105000       0x18 ../lib/spgdt.o
+ .drectve       0x00105018       0x34 ../lib/spidt.o
+                0x0010504c                . = ALIGN (0x4)
+
+.bss            0x00105060    0x10c20
+ *(.bss)
+ .bss           0x00105060        0x0 kernel.o
+ .bss           0x00105060        0x0 cstart.o
+ .bss           0x00105060        0x4 ../lib/spio.o
+ .bss           0x00105064        0x0 ../lib/spstring.o
+ .bss           0x00105064        0x0 ../lib/spsnprintf.o
+ .bss           0x00105064        0x0 ../lib/spgdt.o
+ .bss           0x00105064        0x0 ../lib/spidt.o
+ .bss           0x00105064        0x0 ../lib/spi8259.o
+ .bss           0x00105064        0x0 ../lib/spmemory.o
+ *(COMMON)
+ *fill*         0x00105064       0x1c 
+ COMMON         0x00105080     0xfff8 ../lib/spgdt.o
+                0x00105080                __gdt
+ *fill*         0x00115078        0x8 
+ COMMON         0x00115080      0xc00 ../lib/spidt.o
+                0x00115080                g_int_vector
+                0x00115480                __idt
+                0x00115c80                . = ALIGN (0x4)
+                0x00115c80                _kernel_end = .
+LOAD kernel.o
+LOAD cstart.o
+LOAD ../lib/spio.o
+LOAD ../lib/spstring.o
+LOAD ../lib/spsnprintf.o
+LOAD ../lib/spgdt.o
+LOAD ../lib/spidt.o
+LOAD ../lib/spi8259.o
+LOAD ../lib/spmemory.o
+OUTPUT(kernel.lo pei-i386)

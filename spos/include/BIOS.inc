@@ -1,0 +1,2 @@
+.equ MEMINFONR, 0x7e00
+.equ MEMINFO, 0x7e20
